@@ -1,11 +1,8 @@
 import React from "react";
+import GameController from "./GameController";
 
 function App() {
-    return (
-        <div className="App">
-            <h1>Hello, world!</h1>
-        </div>
-    );
+    return <GameController />;
 }
 
 export default App;
