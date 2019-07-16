@@ -3,6 +3,7 @@ import { Observable, Subscription, fromEvent } from "rxjs";
 import SnakeGameState, { PlayerDirection, SnakePoint } from "./SnakeGameState";
 import gameReducer from "./reducers/SnakeGameReducer";
 import { Action } from "./reducers/SnakeGameActions";
+import { Snake } from "./Snake";
 
 export interface SnakeGameProps {
     width?: number;
@@ -78,14 +79,11 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     public render() {
         return (
             <main>
-                <h1>Hello, World!</h1>
-                {this.state.snake.map((segment: SnakePoint, index: number) => {
-                    return (
-                        <li key={index}>
-                            (x: {segment.x}, y: {segment.y})
-                        </li>
-                    );
-                })}
+                <Snake snake={this.state.snake} />
+                <br />
+                <button onClick={() => this.dispatch({ type: "GROW" })} style={{ display: "block" }}>
+                    GROW
+                </button>
             </main>
         );
     }

@@ -12,18 +12,30 @@ export default function(state: SnakeGameState, action: Action): SnakeGameState {
                 ...state,
                 snake: state.snake.map<SnakePoint>((snakeSegment: SnakePoint, position: number) => {
                     if (position === 0) {
+                        let newSegment: SnakePoint;
                         switch (movement) {
                             case PlayerDirection.UP:
-                                return { ...snakeSegment, y: snakeSegment.y + 1 };
+                                newSegment = { ...snakeSegment, y: snakeSegment.y + 1 };
+                                break;
                             case PlayerDirection.DOWN:
-                                return { ...snakeSegment, y: snakeSegment.y - 1 };
+                                newSegment = { ...snakeSegment, y: snakeSegment.y - 1 };
+                                break;
                             case PlayerDirection.LEFT:
-                                return { ...snakeSegment, x: snakeSegment.x - 1 };
+                                newSegment = { ...snakeSegment, x: snakeSegment.x - 1 };
+                                break;
                             case PlayerDirection.RIGHT:
-                                return { ...snakeSegment, x: snakeSegment.x + 1 };
+                                newSegment = { ...snakeSegment, x: snakeSegment.x + 1 };
+                                break;
                             default:
                                 throw new Error("Unknown player movement action was given.");
                         }
+                        // TODO: Check if snake is out of game boundaries, ran into himself, or ate an apple
+                        return newSegment;
+                    } else if (snakeSegment.skipRenderSteps && snakeSegment.skipRenderSteps > 0) {
+                        return {
+                            ...snakeSegment,
+                            skipRenderSteps: snakeSegment.skipRenderSteps - 1,
+                        };
                     } else {
                         const previousSegment: SnakePoint = state.snake[position - 1];
                         if (previousSegment) {
@@ -34,5 +46,21 @@ export default function(state: SnakeGameState, action: Action): SnakeGameState {
                     }
                 }),
             };
+        case "GROW":
+            if (state.snake.length > 0) {
+                const lastSegment: SnakePoint = state.snake[state.snake.length - 1];
+                return {
+                    ...state,
+                    snake: [
+                        ...state.snake,
+                        {
+                            ...lastSegment,
+                            skipRenderSteps: lastSegment.skipRenderSteps ? lastSegment.skipRenderSteps + 1 : 1,
+                        },
+                    ],
+                };
+            } else {
+                return state;
+            }
     }
 }

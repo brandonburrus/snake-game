@@ -1,11 +1,12 @@
 import { PlayerDirection } from "../SnakeGameState";
 
-export interface GameAction {
+export interface MoveAction {
     type: "MOVE";
-}
-
-export interface MoveAction extends GameAction {
     payload: PlayerDirection;
 }
 
-export type Action = MoveAction;
+export interface GrowAction {
+    type: "GROW";
+}
+
+export type Action = MoveAction | GrowAction;
