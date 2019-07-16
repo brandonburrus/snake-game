@@ -9,4 +9,8 @@ export interface GrowAction {
     type: "GROW";
 }
 
-export type Action = MoveAction | GrowAction;
+export interface EatAction {
+    type: "EAT";
+}
+
+export type Action = MoveAction | GrowAction | EatAction;

@@ -1,12 +1,16 @@
 import SnakeGameState, { SnakePoint, PlayerDirection } from "../SnakeGameState";
 import { Action, MoveAction } from "./SnakeGameActions";
 
-export default function(state: SnakeGameState, action: Action): SnakeGameState {
+export default function reducer(state: SnakeGameState, action: Action): SnakeGameState {
     switch (action.type) {
         case "MOVE":
             const movement: PlayerDirection = (action as MoveAction).payload;
             if (movement === PlayerDirection.UNKNOWN) {
                 return state;
+            }
+            const snakeHead: SnakePoint = state.snake[0];
+            if (snakeHead && snakeHead.x === state.apple.position.x && snakeHead.y === state.apple.position.y) {
+                state = reducer(state, { type: "EAT" });
             }
             return {
                 ...state,
@@ -62,5 +66,21 @@ export default function(state: SnakeGameState, action: Action): SnakeGameState {
             } else {
                 return state;
             }
+        case "EAT":
+            return reducer(
+                {
+                    ...state,
+                    apple: {
+                        position: {
+                            x: Math.floor(Math.random() * state.gameBoard.width),
+                            y: Math.floor(Math.random() * state.gameBoard.height),
+                        },
+                    },
+                    score: state.score + 1,
+                },
+                {
+                    type: "GROW",
+                }
+            );
     }
 }

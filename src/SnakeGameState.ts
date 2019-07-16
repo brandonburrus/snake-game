@@ -28,4 +28,5 @@ export default interface SnakeGameState {
     apple: GameApple;
     snake: SnakePoint[];
     gameBoard: Rect;
+    score: number;
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Observable, Subscription, fromEvent } from "rxjs";
-import SnakeGameState, { PlayerDirection, SnakePoint } from "./SnakeGameState";
+import SnakeGameState, { PlayerDirection } from "./SnakeGameState";
 import gameReducer from "./reducers/SnakeGameReducer";
 import { Action } from "./reducers/SnakeGameActions";
 import { Snake } from "./Snake";
@@ -21,13 +21,14 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     };
 
     public state: SnakeGameState = {
+        score: 0,
+        snake: [{ x: 0, y: 0 }],
         apple: {
             position: {
                 x: 0,
                 y: 0,
             },
         },
-        snake: [{ x: 0, y: 0 }],
         gameBoard: {
             width: SnakeGameController.defaultProps.width,
             height: SnakeGameController.defaultProps.height,
@@ -43,6 +44,9 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     }
 
     public componentDidMount() {
+        this.dispatch({
+            type: "EAT",
+        });
         this.keyboardEventStream = this.keyboardEvents.subscribe((keyboardEvent: KeyboardEvent) => {
             switch (keyboardEvent.key.toLowerCase()) {
                 case "arrowup":
@@ -79,11 +83,12 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     public render() {
         return (
             <main>
-                <Snake snake={this.state.snake} />
+                <Snake snake={this.state.snake} apple={this.state.apple} />
                 <br />
                 <button onClick={() => this.dispatch({ type: "GROW" })} style={{ display: "block" }}>
                     GROW
                 </button>
+                <p>{this.state.score}</p>
             </main>
         );
     }
