@@ -1,30 +1,32 @@
 import React, { Component } from "react";
 import { Observable, Subscription, fromEvent } from "rxjs";
-import SnakeGameState, { PlayerDirection } from "./SnakeGameState";
+import SnakeGameState, { PlayerDirection, SnakePoint } from "./SnakeGameState";
+import gameReducer from "./reducers/SnakeGameReducer";
+import { Action } from "./reducers/SnakeGameActions";
 
 export interface SnakeGameProps {
     width?: number;
     height?: number;
 }
 
-export default class SnakeGameController extends Component<SnakeGameProps> {
+export default class SnakeGameController extends Component<SnakeGameProps, SnakeGameState> {
     private keyboardEvents: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(document, "keydown");
     private keyboardEventStream?: Subscription;
     private playerDirection: PlayerDirection = PlayerDirection.UNKNOWN;
 
-    static defaultProps = {
+    private static defaultProps = {
         width: 10,
         height: 10,
     };
 
-    static state: SnakeGameState = {
+    public state: SnakeGameState = {
         apple: {
             position: {
                 x: 0,
                 y: 0,
             },
         },
-        snake: [],
+        snake: [{ x: 0, y: 0 }],
         gameBoard: {
             width: SnakeGameController.defaultProps.width,
             height: SnakeGameController.defaultProps.height,
@@ -33,6 +35,10 @@ export default class SnakeGameController extends Component<SnakeGameProps> {
 
     public constructor(props: SnakeGameProps) {
         super(props);
+    }
+
+    public dispatch(gameAction: Action) {
+        this.setState(gameReducer(this.state, gameAction));
     }
 
     public componentDidMount() {
@@ -57,6 +63,11 @@ export default class SnakeGameController extends Component<SnakeGameProps> {
                 default:
                     console.warn("Unknown player input was fired.");
             }
+            // TODO: Remove, only used for manual testing purposes
+            this.dispatch({
+                type: "MOVE",
+                payload: this.playerDirection,
+            });
         });
     }
 
@@ -68,6 +79,13 @@ export default class SnakeGameController extends Component<SnakeGameProps> {
         return (
             <main>
                 <h1>Hello, World!</h1>
+                {this.state.snake.map((segment: SnakePoint, index: number) => {
+                    return (
+                        <li key={index}>
+                            (x: {segment.x}, y: {segment.y})
+                        </li>
+                    );
+                })}
             </main>
         );
     }

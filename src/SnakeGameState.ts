@@ -4,7 +4,7 @@ export interface Point {
 }
 
 export interface SnakePoint extends Point {
-    skipRenderSteps: number;
+    skipRenderSteps?: number;
 }
 
 export interface GameApple {
