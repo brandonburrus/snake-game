@@ -13,4 +13,8 @@ export interface EatAction {
     type: "EAT";
 }
 
-export type Action = MoveAction | GrowAction | EatAction;
+export interface NewGameAction {
+    type: "NEW_GAME";
+}
+
+export type Action = MoveAction | GrowAction | EatAction | NewGameAction;

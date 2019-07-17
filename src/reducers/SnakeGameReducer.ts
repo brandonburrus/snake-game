@@ -2,6 +2,9 @@ import SnakeGameState, { SnakePoint, PlayerDirection } from "../SnakeGameState";
 import { Action, MoveAction } from "./SnakeGameActions";
 
 export default function reducer(state: SnakeGameState, action: Action): SnakeGameState {
+    if (state.gameIsOver) {
+        return state;
+    }
     switch (action.type) {
         case "MOVE":
             const movement: PlayerDirection = (action as MoveAction).payload;
@@ -52,7 +55,10 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 return reducer(movementReduction, { type: "EAT" });
                 // Determine if the snake is trying to run into itself (returning game over if so)
             } else if (state.snake.some((segment: SnakePoint) => segment.x === snakeHead.x && segment.y === snakeHead.y)) {
-                return state;
+                return {
+                    ...state,
+                    gameIsOver: true,
+                };
                 // Determin if the snake is attempting to go out of bounds
             } else if (
                 snakeHead.x > state.gameBoard.size.width ||
@@ -60,7 +66,10 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 snakeHead.x < 0 ||
                 snakeHead.y < 0
             ) {
-                return state;
+                return {
+                    ...state,
+                    gameIsOver: true,
+                };
             }
             return movementReduction;
         case "GROW":
@@ -93,5 +102,7 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 },
                 score: state.score + 1,
             };
+        case "NEW_GAME":
+            return state;
     }
 }

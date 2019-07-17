@@ -98,6 +98,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
                     GROW
                 </button>
                 <p>{this.state.score}</p>
+                {this.state.gameIsOver && <p>GAME OVER!</p>}
             </main>
         );
     }
