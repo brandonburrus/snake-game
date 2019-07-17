@@ -1,6 +1,6 @@
 import React from "react";
 import { SnakePoint, GameApple, Rect } from "./SnakeGameState";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 type SnakeContainerProps = {
     dimensions: Rect;
