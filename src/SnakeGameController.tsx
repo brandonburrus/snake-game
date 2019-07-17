@@ -3,7 +3,7 @@ import { Observable, Subscription, fromEvent } from "rxjs";
 import SnakeGameState, { PlayerDirection } from "./SnakeGameState";
 import gameReducer from "./reducers/SnakeGameReducer";
 import { Action } from "./reducers/SnakeGameActions";
-import { Snake } from "./Snake";
+import { SnakeGame } from "./SnakeGame";
 
 export interface SnakeGameProps {
     width?: number;
@@ -30,9 +30,13 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
             },
         },
         gameBoard: {
-            width: SnakeGameController.defaultProps.width,
-            height: SnakeGameController.defaultProps.height,
+            size: {
+                width: SnakeGameController.defaultProps.width,
+                height: SnakeGameController.defaultProps.height,
+            },
+            scale: 15,
         },
+        gameIsOver: false,
     };
 
     public constructor(props: SnakeGameProps) {
@@ -83,7 +87,12 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     public render() {
         return (
             <main>
-                <Snake snake={this.state.snake} apple={this.state.apple} />
+                <SnakeGame
+                    snake={this.state.snake}
+                    apple={this.state.apple}
+                    dimensions={this.state.gameBoard.size}
+                    scale={this.state.gameBoard.scale}
+                />
                 <br />
                 <button onClick={() => this.dispatch({ type: "GROW" })} style={{ display: "block" }}>
                     GROW

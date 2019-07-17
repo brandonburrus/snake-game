@@ -27,6 +27,10 @@ export interface Rect {
 export default interface SnakeGameState {
     apple: GameApple;
     snake: SnakePoint[];
-    gameBoard: Rect;
+    gameBoard: {
+        size: Rect;
+        scale: number;
+    };
     score: number;
+    gameIsOver: boolean;
 }

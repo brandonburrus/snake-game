@@ -8,13 +8,10 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
             if (movement === PlayerDirection.UNKNOWN) {
                 return state;
             }
-            const snakeHead: SnakePoint = state.snake[0];
-            if (snakeHead && snakeHead.x === state.apple.position.x && snakeHead.y === state.apple.position.y) {
-                state = reducer(state, { type: "EAT" });
-            }
-            return {
+            const movementReduction = {
                 ...state,
                 snake: state.snake.map<SnakePoint>((snakeSegment: SnakePoint, position: number) => {
+                    // Snakes head is always the first element in the snake array
                     if (position === 0) {
                         let newSegment: SnakePoint;
                         switch (movement) {
@@ -33,7 +30,6 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                             default:
                                 throw new Error("Unknown player movement action was given.");
                         }
-                        // TODO: Check if snake is out of game boundaries, ran into himself, or ate an apple
                         return newSegment;
                     } else if (snakeSegment.skipRenderSteps && snakeSegment.skipRenderSteps > 0) {
                         return {
@@ -50,6 +46,23 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                     }
                 }),
             };
+            const snakeHead = movementReduction.snake[0];
+            // Determine if the snake ate an apple (comparing snake head location to apple location)
+            if (snakeHead && snakeHead.x === state.apple.position.x && snakeHead.y === state.apple.position.y) {
+                return reducer(movementReduction, { type: "EAT" });
+                // Determine if the snake is trying to run into itself (returning game over if so)
+            } else if (state.snake.some((segment: SnakePoint) => segment.x === snakeHead.x && segment.y === snakeHead.y)) {
+                return state;
+                // Determin if the snake is attempting to go out of bounds
+            } else if (
+                snakeHead.x > state.gameBoard.size.width ||
+                snakeHead.y > state.gameBoard.size.height ||
+                snakeHead.x < 0 ||
+                snakeHead.y < 0
+            ) {
+                return state;
+            }
+            return movementReduction;
         case "GROW":
             if (state.snake.length > 0) {
                 const lastSegment: SnakePoint = state.snake[state.snake.length - 1];
@@ -67,20 +80,18 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 return state;
             }
         case "EAT":
-            return reducer(
-                {
-                    ...state,
-                    apple: {
-                        position: {
-                            x: Math.floor(Math.random() * state.gameBoard.width),
-                            y: Math.floor(Math.random() * state.gameBoard.height),
-                        },
-                    },
-                    score: state.score + 1,
-                },
-                {
+            // TODO: Ensure randomized location is not in snakes body
+            return {
+                ...reducer(state, {
                     type: "GROW",
-                }
-            );
+                }),
+                apple: {
+                    position: {
+                        x: Math.floor(Math.random() * state.gameBoard.size.width),
+                        y: Math.floor(Math.random() * state.gameBoard.size.height),
+                    },
+                },
+                score: state.score + 1,
+            };
     }
 }
