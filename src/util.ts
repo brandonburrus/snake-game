@@ -11,9 +11,10 @@ export function generateGridCoordinateList(grid: Rect): Point[] {
 }
 
 export function getCoordinateWhitelist(coordsinates: Point[], blacklist: Point[]): Point[] {
-    return coordsinates.filter((coordinate: Point) =>
-        blacklist.some((badCoordinate: Point) => {
-            return coordinate.x !== badCoordinate.x && coordinate.y !== badCoordinate.y;
-        })
+    return coordsinates.filter(
+        (coordinate: Point) =>
+            !blacklist.some((badCoordinate: Point) => {
+                return coordinate.x === badCoordinate.x && coordinate.y === badCoordinate.y;
+            })
     );
 }
