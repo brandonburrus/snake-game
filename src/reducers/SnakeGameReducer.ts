@@ -1,5 +1,6 @@
-import SnakeGameState, { SnakePoint, PlayerDirection } from "../SnakeGameState";
+import SnakeGameState, { Point, SnakePoint, PlayerDirection } from "../SnakeGameState";
 import { Action, MoveAction } from "./SnakeGameActions";
+import { getCoordinateWhitelist, generateGridCoordinateList } from "../util";
 
 export default function reducer(state: SnakeGameState, action: Action): SnakeGameState {
     if (action.type !== "NEW_GAME" && state.gameIsOver) {
@@ -83,16 +84,22 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 return state;
             }
         case "EAT":
-            // TODO: Ensure randomized location is not in snakes body
+            const randomizeOptions: Point[] = getCoordinateWhitelist(
+                generateGridCoordinateList(state.gameBoard.size),
+                state.snake
+            );
+            if (randomizeOptions.length <= 0) {
+                return {
+                    ...state,
+                    gameIsOver: true,
+                };
+            }
             return {
                 ...reducer(state, {
                     type: "GROW",
                 }),
                 apple: {
-                    position: {
-                        x: Math.floor(Math.random() * state.gameBoard.size.width),
-                        y: Math.floor(Math.random() * state.gameBoard.size.height),
-                    },
+                    position: randomizeOptions[Math.floor(Math.random() * randomizeOptions.length)],
                 },
                 score: state.score + 1,
                 highScore: Math.max(state.highScore, state.score + 1),
