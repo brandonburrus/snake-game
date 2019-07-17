@@ -49,7 +49,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
 
     public componentDidMount() {
         this.dispatch({
-            type: "EAT",
+            type: "NEW_GAME",
         });
         this.keyboardEventStream = this.keyboardEvents.subscribe((keyboardEvent: KeyboardEvent) => {
             switch (keyboardEvent.key.toLowerCase()) {
@@ -94,9 +94,8 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
                     scale={this.state.gameBoard.scale}
                 />
                 <br />
-                <button onClick={() => this.dispatch({ type: "GROW" })} style={{ display: "block" }}>
-                    GROW
-                </button>
+                <button onClick={() => this.dispatch({ type: "GROW" })}>GROW</button>
+                <button onClick={() => this.dispatch({ type: "NEW_GAME" })}>NEW GAME</button>
                 <p>{this.state.score}</p>
                 {this.state.gameIsOver && <p>GAME OVER!</p>}
             </main>

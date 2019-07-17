@@ -2,7 +2,7 @@ import SnakeGameState, { SnakePoint, PlayerDirection } from "../SnakeGameState";
 import { Action, MoveAction } from "./SnakeGameActions";
 
 export default function reducer(state: SnakeGameState, action: Action): SnakeGameState {
-    if (state.gameIsOver) {
+    if (action.type !== "NEW_GAME" && state.gameIsOver) {
         return state;
     }
     switch (action.type) {
@@ -103,6 +103,17 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 score: state.score + 1,
             };
         case "NEW_GAME":
-            return state;
+            return {
+                ...state,
+                snake: [{ x: 0, y: 0 }],
+                score: 0,
+                apple: {
+                    position: {
+                        x: Math.floor(Math.random() * state.gameBoard.size.width),
+                        y: Math.floor(Math.random() * state.gameBoard.size.height),
+                    },
+                },
+                gameIsOver: false,
+            };
     }
 }
