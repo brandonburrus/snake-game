@@ -16,24 +16,18 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 snake: state.snake.map<SnakePoint>((snakeSegment: SnakePoint, position: number) => {
                     // Snakes head is always the first element in the snake array
                     if (position === 0) {
-                        let newSegment: SnakePoint;
                         switch (movement) {
                             case PlayerDirection.UP:
-                                newSegment = { ...snakeSegment, y: snakeSegment.y + 1 };
-                                break;
+                                return { ...snakeSegment, y: snakeSegment.y + 1 };
                             case PlayerDirection.DOWN:
-                                newSegment = { ...snakeSegment, y: snakeSegment.y - 1 };
-                                break;
+                                return { ...snakeSegment, y: snakeSegment.y - 1 };
                             case PlayerDirection.LEFT:
-                                newSegment = { ...snakeSegment, x: snakeSegment.x - 1 };
-                                break;
+                                return { ...snakeSegment, x: snakeSegment.x - 1 };
                             case PlayerDirection.RIGHT:
-                                newSegment = { ...snakeSegment, x: snakeSegment.x + 1 };
-                                break;
+                                return { ...snakeSegment, x: snakeSegment.x + 1 };
                             default:
                                 throw new Error("Unknown player movement action was given.");
                         }
-                        return newSegment;
                     } else if (snakeSegment.skipRenderSteps && snakeSegment.skipRenderSteps > 0) {
                         return {
                             ...snakeSegment,
@@ -101,6 +95,7 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                     },
                 },
                 score: state.score + 1,
+                highScore: Math.max(state.highScore, state.score + 1),
             };
         case "NEW_GAME":
             return {
