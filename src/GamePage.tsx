@@ -9,9 +9,15 @@ import { take } from "rxjs/operators";
 
 const GameContainer = styled.section`
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: calc(100vh - 60px);
+
+    & p#current-score {
+        font-family: "Rubik", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+        padding: 1.5rem;
+    }
 `;
 
 interface GameOverProps {
@@ -20,7 +26,6 @@ interface GameOverProps {
 }
 
 const GameOverContainer = styled.div`
-    background-color: #f0f0f0;
     min-width: ${(props: GameOverProps) => props.size.width + props.scale}px;
     min-height: ${(props: GameOverProps) => props.size.height + props.scale}px;
     display: flex;
@@ -97,6 +102,13 @@ export default function GamePage() {
         [setGameOver, setScore, setHighScore, highScore]
     );
 
+    const gameScoreDidChange = useCallback(
+        (score: number) => {
+            setScore(score);
+        },
+        [setScore]
+    );
+
     const [showStartMessage, setShowStartMessage] = useState(true);
 
     useEffect(() => {
@@ -118,7 +130,15 @@ export default function GamePage() {
             )}
             <GameContainer>
                 {!gameOver ? (
-                    <SnakeGameController {...gameSize()} scale={gameScale} gameDidEnd={gameDidEnd} />
+                    <>
+                        <SnakeGameController
+                            {...gameSize()}
+                            scale={gameScale}
+                            gameDidEnd={gameDidEnd}
+                            gameScoreDidChange={gameScoreDidChange}
+                        />
+                        <p id="current-score">Score: {score}</p>
+                    </>
                 ) : (
                     <GameOverContainer size={gameSize()} scale={gameScale}>
                         <h2>Game Over!</h2>
