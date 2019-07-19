@@ -1,4 +1,4 @@
-import { PlayerDirection } from "../State";
+import { PlayerDirection, Rect } from "../State";
 
 export interface MoveAction {
     type: "MOVE";
@@ -15,6 +15,10 @@ export interface EatAction {
 
 export interface NewGameAction {
     type: "NEW_GAME";
+    payload: {
+        gameBoardSize: Rect;
+        scale: number;
+    };
 }
 
 export type Action = MoveAction | GrowAction | EatAction | NewGameAction;

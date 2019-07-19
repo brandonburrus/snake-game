@@ -1,5 +1,5 @@
 import SnakeGameState, { Point, SnakePoint, PlayerDirection } from "../State";
-import { Action, MoveAction } from "./Action";
+import { Action, MoveAction, NewGameAction } from "./Action";
 import { getCoordinateWhitelist, generateGridCoordinateList } from "../util";
 
 export default function reducer(state: SnakeGameState, action: Action): SnakeGameState {
@@ -105,6 +105,14 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                 highScore: Math.max(state.highScore, state.score + 1),
             };
         case "NEW_GAME":
+            let payload = (action as NewGameAction).payload;
+            payload = {
+                ...payload,
+                gameBoardSize: {
+                    width: payload.gameBoardSize.width / payload.scale,
+                    height: payload.gameBoardSize.height / payload.scale,
+                },
+            };
             return {
                 ...state,
                 snake: [{ x: 0, y: 0 }],
@@ -114,6 +122,10 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                         x: Math.floor(Math.random() * state.gameBoard.size.width),
                         y: Math.floor(Math.random() * state.gameBoard.size.height),
                     },
+                },
+                gameBoard: {
+                    size: payload.gameBoardSize,
+                    scale: payload.scale,
                 },
                 gameIsOver: false,
             };

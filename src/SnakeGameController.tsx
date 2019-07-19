@@ -9,6 +9,7 @@ import { SnakeGame } from "./SnakeGame";
 export interface SnakeGameProps {
     width?: number;
     height?: number;
+    scale?: number;
     renderTickRate?: number;
 }
 
@@ -24,6 +25,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     private static defaultProps = {
         width: 10,
         height: 10,
+        scale: 15,
         renderTickRate: 500,
     };
 
@@ -56,9 +58,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     }
 
     public componentDidMount() {
-        this.dispatch({
-            type: "NEW_GAME",
-        });
+        this.newGame();
         this.keyboardEventStream = this.keyboardEvents.subscribe((keyboardEvent: KeyboardEvent) => {
             switch (keyboardEvent.key.toLowerCase()) {
                 case "arrowup":
@@ -107,6 +107,13 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     private newGame() {
         this.dispatch({
             type: "NEW_GAME",
+            payload: {
+                gameBoardSize: {
+                    width: this.props.width || SnakeGameController.defaultProps.width,
+                    height: this.props.height || SnakeGameController.defaultProps.height,
+                },
+                scale: this.props.scale || SnakeGameController.defaultProps.scale,
+            },
         });
         this.playerDirection = PlayerDirection.UNKNOWN;
     }
@@ -121,12 +128,6 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
                     scale={this.state.gameBoard.scale}
                 />
                 <br />
-                <button onClick={() => this.dispatch({ type: "GROW" })}>GROW</button>
-                <button onClick={this.newGame.bind(this)}>NEW GAME</button>
-                <p>
-                    Score: {this.state.score}, High Score: {this.state.highScore}
-                </p>
-                {this.state.gameIsOver && <p>GAME OVER!</p>}
             </main>
         );
     }
