@@ -10,7 +10,11 @@ export default styled.div`
     justify-content: center;
     font-family: "Rubik", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
     color: #333;
-    z-index: 10;
+    z-index: -1;
+
+    & > * {
+        z-index: 10;
+    }
 
     & > p {
         position: relative;

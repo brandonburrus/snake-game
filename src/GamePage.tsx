@@ -9,6 +9,7 @@ import ButtonStyling from "./ButtonStyling";
 import GameContainer from "./GameContainer";
 import GameOverContainer from "./GameOverContainer";
 import StartGameMessage from "./StartGameMessage";
+import TickRateSlider from "./TickRateSlider";
 
 export default function GamePage() {
     const [windowWidth, setWindowWidth] = useState(window.screen.width);
@@ -63,6 +64,8 @@ export default function GamePage() {
         return () => keyboardInputStream.unsubscribe();
     }, [setShowStartMessage]);
 
+    const [tickRate, setTickRate] = useState(550);
+
     return (
         <div>
             <Nav />
@@ -78,9 +81,16 @@ export default function GamePage() {
                             {...gameSize()}
                             scale={gameScale}
                             gameDidEnd={gameDidEnd}
+                            renderTickRate={tickRate}
                             gameScoreDidChange={gameScoreDidChange}
                         />
                         <p id="current-score">Score: {score}</p>
+                        <TickRateSlider
+                            initialTickRate={tickRate}
+                            didChange={value => {
+                                setTickRate(value);
+                            }}
+                        />
                     </>
                 ) : (
                     <GameOverContainer size={gameSize()} scale={gameScale}>

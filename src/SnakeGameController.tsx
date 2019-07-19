@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Observable, Subscription, fromEvent, interval } from "rxjs";
-import { filter } from "rxjs/operators";
+import { Observable, Subscription, fromEvent, interval, Subject } from "rxjs";
+import { filter, switchMap } from "rxjs/operators";
 import SnakeGameState, { PlayerDirection } from "./State";
 import gameReducer from "./reducers/SnakeReducer";
 import { Action } from "./reducers/Action";
@@ -17,9 +17,7 @@ export interface SnakeGameProps {
 
 export default class SnakeGameController extends Component<SnakeGameProps, SnakeGameState> {
     private keyboardEvents: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(document, "keydown");
-    private renderSteps: Observable<number> = interval(
-        this.props.renderTickRate || SnakeGameController.defaultProps.renderTickRate
-    );
+    private renderSteps: Subject<number> = new Subject<number>();
     private keyboardEventStream?: Subscription;
     private renderStepStream?: Subscription;
     private playerDirection: PlayerDirection = PlayerDirection.UNKNOWN;
@@ -28,7 +26,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
         width: 10,
         height: 10,
         scale: 15,
-        renderTickRate: 500,
+        renderTickRate: 550,
     };
 
     public state: SnakeGameState = {
@@ -91,13 +89,17 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
             }
         });
         this.renderStepStream = this.renderSteps
-            .pipe(filter(() => this.playerDirection !== PlayerDirection.UNKNOWN && !this.state.gameIsOver))
+            .pipe(
+                switchMap(tickRate => interval(tickRate)),
+                filter(() => this.playerDirection !== PlayerDirection.UNKNOWN && !this.state.gameIsOver)
+            )
             .subscribe(() => {
                 this.dispatch({
                     type: "MOVE",
                     payload: this.playerDirection,
                 });
             });
+        this.renderSteps.next(this.props.renderTickRate || SnakeGameController.defaultProps.renderTickRate);
     }
 
     public componentDidUpdate() {
@@ -105,6 +107,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
             this.props.gameDidEnd && this.props.gameDidEnd(this.state);
         }
         this.props.gameScoreDidChange && this.props.gameScoreDidChange(this.state.score);
+        this.renderSteps.next(Math.abs((this.props.renderTickRate || SnakeGameController.defaultProps.renderTickRate) - 1100));
     }
 
     public componentWillUnmount() {
