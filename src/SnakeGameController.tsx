@@ -11,6 +11,7 @@ export interface SnakeGameProps {
     height?: number;
     scale?: number;
     renderTickRate?: number;
+    gameDidEnd?: (state: SnakeGameState) => void;
 }
 
 export default class SnakeGameController extends Component<SnakeGameProps, SnakeGameState> {
@@ -97,6 +98,12 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
                     payload: this.playerDirection,
                 });
             });
+    }
+
+    public componentDidUpdate() {
+        if (this.state.gameIsOver) {
+            this.props.gameDidEnd && this.props.gameDidEnd(this.state);
+        }
     }
 
     public componentWillUnmount() {

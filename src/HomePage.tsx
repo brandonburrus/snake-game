@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import ButtonStyling from "./ButtonStyling";
+import { Link } from "react-router-dom";
 
 const PageContainer = styled.section`
     background-color: #f9f9f9;
@@ -27,20 +28,6 @@ const PageContainer = styled.section`
         position: relative;
         bottom: 6rem;
     }
-
-    & a#game-link {
-        background-color: #20b2aa;
-        box-shadow: 3px 3px 0px #0f524f;
-        color: white;
-        padding: 1rem 3rem;
-        text-decoration: none;
-        font-family: "Rubik", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-        font-size: 1.2rem;
-
-        :hover {
-            box-shadow: 5px 5px 0px #0f524f;
-        }
-    }
 `;
 
 export default function HomePage() {
@@ -48,9 +35,9 @@ export default function HomePage() {
         <PageContainer>
             <h1 id="game-title">Snake</h1>
             <h2 id="author-subtitle">by Brandon Burrus</h2>
-            <Link id="game-link" to="/game">
-                Play Now!
-            </Link>
+            <ButtonStyling id="game-link">
+                <Link to="/game">Play Now</Link>
+            </ButtonStyling>
         </PageContainer>
     );
 }
