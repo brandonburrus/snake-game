@@ -1,5 +1,5 @@
-import SnakeGameState, { Point, SnakePoint, PlayerDirection } from "../SnakeGameState";
-import { Action, MoveAction } from "./SnakeGameActions";
+import SnakeGameState, { Point, SnakePoint, PlayerDirection } from "../State";
+import { Action, MoveAction } from "./Action";
 import { getCoordinateWhitelist, generateGridCoordinateList } from "../util";
 
 export default function reducer(state: SnakeGameState, action: Action): SnakeGameState {

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Observable, Subscription, fromEvent, interval } from "rxjs";
 import { filter } from "rxjs/operators";
-import SnakeGameState, { PlayerDirection } from "./SnakeGameState";
-import gameReducer from "./reducers/SnakeGameReducer";
-import { Action } from "./reducers/SnakeGameActions";
+import SnakeGameState, { PlayerDirection } from "./State";
+import gameReducer from "./reducers/SnakeReducer";
+import { Action } from "./reducers/Action";
 import { SnakeGame } from "./SnakeGame";
 
 export interface SnakeGameProps {

@@ -1,5 +1,5 @@
 import React from "react";
-import { SnakePoint, GameApple, Rect } from "./SnakeGameState";
+import { SnakePoint, GameApple, Rect } from "./State";
 import styled from "styled-components/macro";
 
 type SnakeContainerProps = {

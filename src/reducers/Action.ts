@@ -1,4 +1,4 @@
-import { PlayerDirection } from "../SnakeGameState";
+import { PlayerDirection } from "../State";
 
 export interface MoveAction {
     type: "MOVE";
