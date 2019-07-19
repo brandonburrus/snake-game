@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import SnakeGameController from "./SnakeGameController";
 import Nav from "./Nav";
-import styled from "styled-components";
 import SnakeGameState, { Rect } from "./State";
 import { fromEvent } from "rxjs";
 import { take } from "rxjs/operators";
@@ -9,24 +8,7 @@ import { take } from "rxjs/operators";
 import ButtonStyling from "./ButtonStyling";
 import GameContainer from "./GameContainer";
 import GameOverContainer from "./GameOverContainer";
-
-const StartGameMessage = styled.div`
-    background: none;
-    min-width: 100vw;
-    min-height: 100vh;
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Rubik", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-    color: #333;
-    z-index: 10;
-
-    & > p {
-        position: relative;
-        bottom: 3rem;
-    }
-`;
+import StartGameMessage from "./StartGameMessage";
 
 export default function GamePage() {
     const [windowWidth, setWindowWidth] = useState(window.screen.width);

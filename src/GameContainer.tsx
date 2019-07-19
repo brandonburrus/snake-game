@@ -1,6 +1,7 @@
+import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-export default styled.section`
+const Styling = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,3 +13,11 @@ export default styled.section`
         padding: 1.5rem;
     }
 `;
+
+export type GameContainerProps = {
+    children?: ReactNode;
+};
+
+export default function({ children }: GameContainerProps) {
+    return <Styling>{children}</Styling>;
+}
