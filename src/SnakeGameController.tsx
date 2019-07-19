@@ -32,7 +32,6 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
 
     public state: SnakeGameState = {
         score: 0,
-        highScore: 0,
         snake: [{ x: 0, y: 0 }],
         apple: {
             position: {

@@ -32,6 +32,5 @@ export default interface SnakeGameState {
         scale: number;
     };
     score: number;
-    highScore: number;
     gameIsOver: boolean;
 }

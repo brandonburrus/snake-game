@@ -92,9 +92,9 @@ export default function GamePage() {
         (state: SnakeGameState) => {
             setGameOver(true);
             setScore(state.score);
-            setHighScore(state.highScore);
+            setHighScore(Math.max(state.score, highScore));
         },
-        [setGameOver]
+        [setGameOver, setScore, setHighScore, highScore]
     );
 
     const [showStartMessage, setShowStartMessage] = useState(true);

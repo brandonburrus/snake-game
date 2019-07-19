@@ -102,7 +102,6 @@ export default function reducer(state: SnakeGameState, action: Action): SnakeGam
                     position: randomizeOptions[Math.floor(Math.random() * randomizeOptions.length)],
                 },
                 score: state.score + 1,
-                highScore: Math.max(state.highScore, state.score + 1),
             };
         case "NEW_GAME":
             let payload = (action as NewGameAction).payload;
