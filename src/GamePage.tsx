@@ -4,50 +4,11 @@ import Nav from "./Nav";
 import styled from "styled-components";
 import SnakeGameState, { Rect } from "./State";
 import { fromEvent } from "rxjs";
-import ButtonStyling from "./ButtonStyling";
 import { take } from "rxjs/operators";
 
-const GameContainer = styled.section`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 60px);
-
-    & p#current-score {
-        font-family: "Rubik", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-        padding: 1.5rem;
-    }
-`;
-
-interface GameOverProps {
-    size: Rect;
-    scale: number;
-}
-
-const GameOverContainer = styled.div`
-    min-width: ${(props: GameOverProps) => props.size.width + props.scale}px;
-    min-height: ${(props: GameOverProps) => props.size.height + props.scale}px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: "Rubik", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-
-    & h2 {
-        font-size: 3rem;
-        margin: 0.5rem;
-    }
-
-    & h3 {
-        font-size: 1rem;
-        margin: 0.5rem;
-    }
-
-    & div#space-wrapper {
-        margin: 3.5rem 0;
-    }
-`;
+import ButtonStyling from "./ButtonStyling";
+import GameContainer from "./GameContainer";
+import GameOverContainer from "./GameOverContainer";
 
 const StartGameMessage = styled.div`
     background: none;
