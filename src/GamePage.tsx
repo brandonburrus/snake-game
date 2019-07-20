@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
-import SnakeGameController from "./SnakeGameController";
-import Nav from "./Nav";
-import SnakeGameState, { Rect } from "./State";
+import SnakeGameController from "./game/SnakeGameController";
+import Nav from "./components/Nav";
+import SnakeGameState, { Rect } from "./game/State";
 import { fromEvent } from "rxjs";
 import { take } from "rxjs/operators";
 
-import ButtonStyling from "./ButtonStyling";
-import GameContainer from "./GameContainer";
-import GameOverContainer from "./GameOverContainer";
-import StartGameMessage from "./StartGameMessage";
-import TickRateSlider from "./TickRateSlider";
+import ButtonStyling from "./components/ButtonStyling";
+import GameContainer from "./components/GameContainer";
+import GameOverContainer from "./components/GameOverContainer";
+import StartGameMessage from "./components/StartGameMessage";
+import TickRateSlider from "./components/TickRateSlider";
 
 export default function GamePage() {
     const [windowWidth, setWindowWidth] = useState(window.screen.width);

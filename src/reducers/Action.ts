@@ -1,4 +1,4 @@
-import { PlayerDirection, Rect } from "../State";
+import { PlayerDirection, Rect } from "../game/State";
 
 export interface MoveAction {
     type: "MOVE";

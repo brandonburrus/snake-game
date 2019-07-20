@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Rect } from "./State";
+import { Rect } from "../game/State";
 
 export interface GameOverProps {
     size: Rect;

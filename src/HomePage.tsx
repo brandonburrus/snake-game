@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ButtonStyling from "./ButtonStyling";
+import ButtonStyling from "./components/ButtonStyling";
 import { Link } from "react-router-dom";
 
 const PageContainer = styled.section`

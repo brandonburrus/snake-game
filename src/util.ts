@@ -1,4 +1,4 @@
-import { Point, Rect } from "./State";
+import { Point, Rect } from "./game/State";
 
 export function generateGridCoordinateList(grid: Rect): Point[] {
     let coordinates: Point[] = [];

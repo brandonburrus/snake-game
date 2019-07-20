@@ -1,4 +1,4 @@
-import SnakeGameState, { Point, SnakePoint, PlayerDirection } from "../State";
+import SnakeGameState, { Point, SnakePoint, PlayerDirection } from "../game/State";
 import { Action, MoveAction, NewGameAction } from "./Action";
 import { getCoordinateWhitelist, generateGridCoordinateList } from "../util";
 
