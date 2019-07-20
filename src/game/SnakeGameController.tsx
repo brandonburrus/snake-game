@@ -5,6 +5,8 @@ import SnakeGameState, { PlayerDirection } from "./State";
 import gameReducer from "../reducers/SnakeReducer";
 import { Action } from "../reducers/Action";
 import { SnakeGame } from "./SnakeGame";
+import { FromEventTarget } from "rxjs/internal/observable/fromEvent";
+import { determineDirection } from "../util";
 
 export interface SnakeGameProps {
     width?: number;
@@ -19,6 +21,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
     private keyboardEvents: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(document, "keydown");
     private renderSteps: Subject<number> = new Subject<number>();
     private keyboardEventStream?: Subscription;
+    private mouseEventStream?: Subscription;
     private renderStepStream?: Subscription;
     private playerDirection: PlayerDirection = PlayerDirection.UNKNOWN;
 
@@ -88,6 +91,12 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
                     console.warn("Unknown player input was fired.");
             }
         });
+        this.mouseEventStream = fromEvent<MouseEvent>(
+            document.getElementById("snake-game") as FromEventTarget<MouseEvent>,
+            "mousedown"
+        ).subscribe(({ layerX: x, layerY: y }: MouseEvent) => {
+            this.playerDirection = determineDirection(x, y, this.props.width || SnakeGameController.defaultProps.width);
+        });
         this.renderStepStream = this.renderSteps
             .pipe(
                 switchMap(tickRate => interval(tickRate)),
@@ -112,6 +121,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
 
     public componentWillUnmount() {
         this.keyboardEventStream && this.keyboardEventStream.unsubscribe();
+        this.mouseEventStream && this.mouseEventStream.unsubscribe();
         this.renderStepStream && this.renderStepStream.unsubscribe();
     }
 
@@ -131,7 +141,7 @@ export default class SnakeGameController extends Component<SnakeGameProps, Snake
 
     public render() {
         return (
-            <main>
+            <main id="snake-game">
                 <SnakeGame
                     snake={this.state.snake}
                     apple={this.state.apple}

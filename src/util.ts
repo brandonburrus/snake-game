@@ -1,4 +1,4 @@
-import { Point, Rect } from "./game/State";
+import { Point, Rect, PlayerDirection } from "./game/State";
 
 export function generateGridCoordinateList(grid: Rect): Point[] {
     let coordinates: Point[] = [];
@@ -17,4 +17,21 @@ export function getCoordinateWhitelist(coordsinates: Point[], blacklist: Point[]
                 return coordinate.x === badCoordinate.x && coordinate.y === badCoordinate.y;
             })
     );
+}
+
+export function determineDirection(x: number, y: number, width: number): PlayerDirection {
+    const invertedX: number = Math.abs(x - width);
+    if (x > y) {
+        if (invertedX > y) {
+            return PlayerDirection.UP;
+        } else {
+            return PlayerDirection.RIGHT;
+        }
+    } else {
+        if (invertedX > y) {
+            return PlayerDirection.LEFT;
+        } else {
+            return PlayerDirection.DOWN;
+        }
+    }
 }
