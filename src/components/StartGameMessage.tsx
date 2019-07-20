@@ -3,7 +3,7 @@ import styled from "styled-components";
 export default styled.div`
     background: none;
     min-width: 100vw;
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
     position: absolute;
     display: flex;
     align-items: center;
