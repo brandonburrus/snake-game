@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import SnakeGameController from "./game/SnakeGameController";
 import Nav from "./components/Nav";
 import SnakeGameState, { Rect } from "./game/State";
-import { fromEvent } from "rxjs";
+import { fromEvent, merge } from "rxjs";
 import { take } from "rxjs/operators";
 
 import ButtonStyling from "./components/ButtonStyling";
@@ -10,6 +10,7 @@ import GameContainer from "./components/GameContainer";
 import GameOverContainer from "./components/GameOverContainer";
 import StartGameMessage from "./components/StartGameMessage";
 import TickRateSlider from "./components/TickRateSlider";
+import { FromEventTarget } from "rxjs/internal/observable/fromEvent";
 
 export default function GamePage() {
     const [windowWidth, setWindowWidth] = useState(window.screen.width);
@@ -56,7 +57,10 @@ export default function GamePage() {
     const [showStartMessage, setShowStartMessage] = useState(true);
 
     useEffect(() => {
-        const keyboardInputStream = fromEvent(document, "keydown")
+        const keyboardInputStream = merge(
+            fromEvent(document, "keydown"),
+            fromEvent(document.getElementById("snake-game") as FromEventTarget<MouseEvent>, "mousedown")
+        )
             .pipe(take(1))
             .subscribe(() => {
                 setShowStartMessage(false);
@@ -71,7 +75,11 @@ export default function GamePage() {
             <Nav />
             {showStartMessage && (
                 <StartGameMessage>
-                    <p>Use the Arrow Keys, or WASD to Start the Game.</p>
+                    <p>
+                        {window.screen.width > 450
+                            ? "Use the Arrow Keys, or WASD to Start the Game."
+                            : "Tap on the game board in the direction you want to move"}
+                    </p>
                 </StartGameMessage>
             )}
             <GameContainer>
